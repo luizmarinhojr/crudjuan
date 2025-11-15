@@ -15,7 +15,7 @@ if (isset($_REQUEST["acao"])) {
             $senha_hash = password_hash($senha_plana, PASSWORD_DEFAULT);
 
             $sql = "INSERT INTO clientes (nome, telefone, data_de_nascimento, email, senha) 
-                    VALUES ('{$nome}','{$email}','{$senha_plana}','{$aniversario}','{$telefone}')";
+                    VALUES (?, ?, ?, ?, ?)";
                     
             $stmt = $con->prepare($sql);
             
@@ -24,9 +24,8 @@ if (isset($_REQUEST["acao"])) {
                 print "<script>location.href='index.php?page=listar';</script>";
                 exit;
             }
-
             
-            $stmt->bind_param("sssss", $nome, $email, $senha_hash, $aniversario, $telefone);
+            $stmt->bind_param("sssss", $nome, $telefone, $aniversario, $email, $senha_hash);
             
             if ($stmt->execute()) {
                 print "<script>alert('Usuário cadastrado com sucesso!');</script>";
